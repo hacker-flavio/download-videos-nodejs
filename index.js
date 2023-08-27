@@ -13,10 +13,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   const allowedOrigins = ["http://localhost:3050", "http://localhost:3000"];
   const origin = req.headers.origin;
+  console.log(req.headers);
+  // Check if the request is coming from Postman
+  const isPostmanRequest = req.headers["user-agent"].includes("Postman");
 
-  if (allowedOrigins.includes(origin)) {
+  if (isPostmanRequest || allowedOrigins.includes(origin)) {
     // Allow the request to proceed
-    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Origin", origin || "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     next();
